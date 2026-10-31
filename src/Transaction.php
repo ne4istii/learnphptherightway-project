@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 class Transaction
 {
-    // private: эти свойства можно менять только через методы класса.
-    private float $amount;
-    private string $description;
-
-    // Конструктор вызывается при создании объекта через new Transaction(...).
+    // private в параметрах сразу создаёт свойства и сохраняет в них переданные значения.
     public function __construct(
-        float $amount,
-        string $description
-    )
+        private float $amount,
+        private string $description,
+        private ?Customer $customer = null
+    ) {
+    }
+
+    public function getCustomer(): ?Customer
     {
-        $this->amount = $amount;
-        $this->description = $description;
+        // null означает, что клиент к этой операции пока не привязан.
+        return $this->customer;
     }
 
     public function addTax(float $rate): Transaction

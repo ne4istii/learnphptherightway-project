@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-// Подключаем файл с описанием класса Transaction.
+// Подключаем классы, которые используются в примере.
+require_once __DIR__ . '/../PaymentProfile.php';
+require_once __DIR__ . '/../Customer.php';
 require_once __DIR__ . '/../Transaction.php';
 
-// new создаёт объект; -> вызывает его методы один за другим.
-$transaction1 = (new Transaction(300, 'Transaction 1'))
-    ->addTax(8)
-    ->applyDiscount(10);
+// Третий аргумент не передан: у этой операции нет клиента.
+$withoutCustomer = new Transaction(5, 'Без клиента');
 
-$transaction2 = (new Transaction(500, 'Transaction 2'))
-    ->addTax(8)
-    ->applyDiscount(15);
+// ?-> возвращает null и останавливает цепочку, если слева null.
+// ?? подставляет понятный текст вместо этого null.
+echo $withoutCustomer->getCustomer()?->getPaymentProfile()?->id ?? 'Профиль не найден';
+echo '<br />';
 
-// Показываем итоговую сумму каждой операции.
-var_dump($transaction1->getAmount(), $transaction2->getAmount());
+// Теперь каждый объект в цепочке существует, поэтому получаем id профиля.
+$withCustomer = new Transaction(5, 'С клиентом', new Customer(new PaymentProfile(42)));
+echo $withCustomer->getCustomer()?->getPaymentProfile()?->id;
+echo '<br />';
