@@ -42,11 +42,15 @@
 
 ## Урок 39 — автозагрузка, PSR-4 и Composer
 
-- `spl_autoload_register()` вызывает нашу функцию, когда PHP впервые встречает неизвестный класс. В `manual-autoload.php` она превращает полное имя `App\PaymentGateway\Paddle\Transaction` в путь `app/PaymentGateway/Paddle/Transaction.php` и подключает файл.
+- `spl_autoload_register()` вызывает нашу функцию, когда PHP встречает ещё не загруженный класс, интерфейс или трейт. Загрузчиков может быть несколько: PHP пробует их по порядку; аргумент `prepend: true` ставит загрузчик в начало очереди.
+- В `manual-autoload.php` полное имя `App\PaymentGateway\Paddle\Transaction` превращается в путь `app/PaymentGateway/Paddle/Transaction.php`. `__DIR__` задаёт путь от текущего файла, а `is_file()` не даёт `require` выдать предупреждение при отсутствии файла. Автор приводит `App` к нижнему регистру через `lcfirst()`; мы убираем префикс `App\` и подставляем `app/` — итоговый путь тот же.
 - PSR-4 — общее правило такого соответствия между именем класса и путём. В `composer.json` запись `"App\\": "app/"` поручает эту работу Composer. После изменения правила запускаем `composer dump-autoload`.
 - `require vendor/autoload.php` подключает загрузчик Composer один раз. Он находит и наши классы, и классы установленной библиотеки `ramsey/uuid`.
-- Composer записывает точные версии зависимостей в `composer.lock`: его сохраняем в Git. Папка `vendor/` создаётся командой `composer install` и в Git не попадает.
-- PSR-1 и PSR-12 описывают стиль PHP-кода; PSR-4 отвечает именно за автозагрузку.
+- `composer require ramsey/uuid` добавляет библиотеку и её собственные зависимости. `composer.json` можно создать и командой `composer init`; `composer update` обновляет подходящие версии, `composer remove` удаляет зависимость.
+- `require` в `composer.json` — зависимости приложения, `require-dev` — инструменты для разработки и тестов. При `composer install --no-dev` зависимости из `require-dev` не устанавливаются.
+- Composer записывает точные версии всех зависимостей в `composer.lock`: его сохраняем в Git. Команда `composer install` берёт эти версии и создаёт `vendor/`; эту папку в Git не добавляем.
+- `composer dump-autoload -o` заранее строит карту классов для ускорения загрузки. Новые классы по умолчанию всё ещё находятся через PSR-4; повторный запуск нужен, чтобы добавить их в оптимизированную карту.
+- PSR — рекомендации PHP-FIG. PSR-1 и PSR-12 описывают стиль PHP-кода; PSR-4 отвечает за автозагрузку. Автор показывает, что PhpStorm может автоматически форматировать код по PSR-12.
 
 Посмотри оба варианта: [ручная автозагрузка](http://localhost:8001/manual-autoload.php) и [Composer с UUID](http://localhost:8001/composer-autoload.php). После клонирования проекта запусти `docker compose -p learnphptherightway -f docker/docker-compose.yml up -d --build`, затем `docker compose -p learnphptherightway -f docker/docker-compose.yml exec app composer install`.
 
