@@ -44,7 +44,11 @@
 
 - `spl_autoload_register()` вызывает нашу функцию, когда PHP встречает ещё не загруженный класс, интерфейс или трейт. Загрузчиков может быть несколько: PHP пробует их по порядку; аргумент `prepend: true` ставит загрузчик в начало очереди.
 - В `manual-autoload.php` полное имя `App\PaymentGateway\Paddle\Transaction` превращается в путь `app/PaymentGateway/Paddle/Transaction.php`. `__DIR__` задаёт путь от текущего файла, а `is_file()` не даёт `require` выдать предупреждение при отсутствии файла. Автор приводит `App` к нижнему регистру через `lcfirst()`; мы убираем префикс `App\` и подставляем `app/` — итоговый путь тот же.
-- PSR-4 — общее правило такого соответствия между именем класса и путём. В `composer.json` запись `"App\\": "app/"` поручает эту работу Composer. После изменения правила запускаем `composer dump-autoload`.
+- **PSR-4 — правило, по которому загрузчик находит файл класса по его полному имени.** В `composer.json` мы записали `"App\\": "app/"`. Это значит: «если имя класса начинается с `App\`, ищи его файл внутри папки `app/`». Два слеша `\\` в JSON обозначают один слеш `\` в имени класса.
+
+  Например, PHP нужен класс `App\PaymentGateway\Paddle\Transaction`. Composer убирает начало `App\`, получает `PaymentGateway\Paddle\Transaction`, заменяет `\` на `/` и ищет `src/app/PaymentGateway/Paddle/Transaction.php`. В этом файле действительно объявлены `namespace App\PaymentGateway\Paddle;` и `class Transaction`.
+
+  После изменения **самого правила** в `composer.json` запускаем `composer dump-autoload`. При добавлении нового класса в уже настроенную папку `app/` повторять команду обычно не нужно. `use` только сокращает имя класса в PHP-коде; файл находит загрузчик.
 - `require vendor/autoload.php` подключает загрузчик Composer один раз. Он находит и наши классы, и классы установленной библиотеки `ramsey/uuid`.
 - `composer require ramsey/uuid` добавляет библиотеку и её собственные зависимости. `composer.json` можно создать и командой `composer init`; `composer update` обновляет подходящие версии, `composer remove` удаляет зависимость.
 - `require` в `composer.json` — зависимости приложения, `require-dev` — инструменты для разработки и тестов. При `composer install --no-dev` зависимости из `require-dev` не устанавливаются.
