@@ -27,6 +27,18 @@
 
 Код: [тег `lesson-37`](https://github.com/ne4istii/learnphptherightway-project/tree/lesson-37).
 
+## Урок 38 — пространства имён (`namespace`)
+
+- Два класса могут называться `Transaction`, если их полные имена различаются: `PaymentGateway\Paddle\Transaction` и `PaymentGateway\Stripe\Transaction`.
+- `namespace` задаёт полное имя класса. Папки удобно называть так же, но само имя папки namespace не создаёт.
+- `require_once` загружает файл с классом, а `use` позволяет писать короткое имя вместо полного. В следующем уроке автор переходит к автозагрузке файлов.
+- `as StripeTransaction` помогает использовать в одном файле оба класса `Transaction`.
+- Если внутри namespace нужен встроенный класс PHP, его можно указать от корня: `new \DateTime()`.
+
+Пример: открой `http://localhost:8001/namespaces.php` — `var_dump()` покажет объекты из двух разных пространств имён.
+
+Код: [тег `lesson-38`](https://github.com/ne4istii/learnphptherightway-project/tree/lesson-38). Видео: [урок 2.4 автора](https://youtu.be/Jni9c0-NjrY).
+
 ## Следующие уроки
 
 После каждого урока добавляем сюда несколько простых пунктов, один пример и ссылку на тег с его кодом.
