@@ -32,6 +32,7 @@
 - Два класса могут называться `Transaction`, если их полные имена различаются: `PaymentGateway\Paddle\Transaction` и `PaymentGateway\Stripe\Transaction`.
 - `namespace` задаёт полное имя класса. Папки удобно называть так же, но само имя папки namespace не создаёт.
 - `require_once` загружает файл с классом, а `use` позволяет писать короткое имя вместо полного. В следующем уроке автор переходит к автозагрузке файлов.
+- В `use` фигурные скобки группируют классы из одного namespace: `use PaymentGateway\Paddle\{Transaction, CustomerProfile};` — то же самое, что два отдельных `use`.
 - `as StripeTransaction` помогает использовать в одном файле оба класса `Transaction`.
 - Если внутри namespace нужен встроенный класс PHP, его можно указать от корня: `new \DateTime()`.
 
