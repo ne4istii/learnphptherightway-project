@@ -9,8 +9,22 @@ use App\Enums\Status;
 // Имя Transaction совпадает со Stripe, но пространство имён другое.
 class Transaction
 {
+    // Одно значение на весь класс, а не отдельное значение у каждого объекта.
+    private static int $count = 0;
+
     // Новая операция сначала ожидает оплаты.
     private string $status = Status::PENDING;
+
+    public function __construct()
+    {
+        self::$count++;
+    }
+
+    public static function getCount(): int
+    {
+        // В статическом методе нет $this: он вызывается без конкретного объекта.
+        return self::$count;
+    }
 
     public function setStatus(string $status): self
     {
