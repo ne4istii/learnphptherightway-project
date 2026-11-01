@@ -15,9 +15,6 @@ echo $transaction->process() . "\n";
 $another = new Transaction(125);
 echo $another->process() . "\n";
 
-// Даже у другого объекта того же класса private-свойство видно внутри метода класса.
-echo 'Одинаковая сумма: ' . ($transaction->hasSameAmountAs(new Transaction(25)) ? 'да' : 'нет') . "\n";
-
 // Только демонстрация из урока: Reflection обходит обычное ограничение private.
 $property = new ReflectionProperty(Transaction::class, 'amount');
 echo 'Reflection читает сумму: ' . $property->getValue($transaction) . "\n";
