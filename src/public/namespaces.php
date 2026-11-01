@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 // require_once загружает файлы; use ниже лишь сокращает имена классов.
+require_once __DIR__ . '/../app/Enums/Status.php';
 require_once __DIR__ . '/../app/PaymentGateway/Stripe/Transaction.php';
 require_once __DIR__ . '/../app/PaymentGateway/Paddle/Transaction.php';
 require_once __DIR__ . '/../app/PaymentGateway/Paddle/CustomerProfile.php';
