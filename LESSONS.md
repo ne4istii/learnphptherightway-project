@@ -67,11 +67,17 @@
 - Внутри класса `self::PAID` обращается к константе этого класса. `$this` относится к конкретному объекту. Специальная запись `Transaction::class` возвращает полное имя класса с `namespace`.
 - Вместо строки `'paid'` в разных местах используем `Status::PAID`: так меньше риск опечатки. Но метод всё ещё может получить произвольную строку, поэтому `setStatus()` отдельно проверяет её по `Status::ALL_STATUSES` и отклоняет неизвестные значения.
 - `ALL_STATUSES` — массив-константа: ключи служат допустимыми статусами, значения — подписями для вывода. Автор сначала хранит статусы в `Transaction`, затем переносит их в отдельный класс `App\Enums\Status`.
-- В контейнере урока PHP 8.0.2, поэтому `Status` — обычный класс с константами. Встроенный `enum` появился позже, в PHP 8.1.
+- В исходном примере урока PHP 8.0.2, поэтому `Status` — обычный класс с константами. Встроенный `enum` появился в PHP 8.1. Наш Docker-контейнер теперь использует PHP 8.4.
 
 Пример: [class-constants.php](http://localhost:8001/class-constants.php) показывает `paid`, начальный статус `pending`, смену на `paid`, подпись `Paid` и полное имя класса.
 
 Код: [тег `lesson-40`](https://github.com/ne4istii/learnphptherightway-project/tree/lesson-40). Видео: [урок 2.6 автора](https://youtu.be/bEGNvUxYf2o).
+
+### Дополнение: тот же статус через enum
+
+В [Native/Status.php](src/app/Enums/Native/Status.php) `enum Status: string` задаёт только три допустимых варианта: `Paid`, `Pending`, `Declined`. Например, `Status::Paid` — сам вариант enum, а `Status::Paid->value` — строка `'paid'`. Метод `label()` возвращает подпись вместо массива `ALL_STATUSES`. `Status::from('paid')` создаёт вариант из строки, а `Status::tryFrom('unknown')` возвращает `null`.
+
+Открой [пример enum](http://localhost:8001/enum-status.php). Старый [пример с константами](http://localhost:8001/class-constants.php) оставлен для сравнения.
 
 ## Следующие уроки
 
